@@ -94,7 +94,7 @@ public class WebServer extends Verticle {
             public void handle(final HttpServerRequest request) {
                 // TODO Auto-generated method stub
 
-                log.info("Requested URI is " + request.uri());
+                //log.info("Requested URI is " + request.uri());
 
                 if (request.uri().equals("/")) {
                     // Serve the index page
@@ -133,15 +133,18 @@ public class WebServer extends Verticle {
                             final String email = attrs.get("email");
                             final String nickname = attrs.get("nickname");
                             final String password = attrs.get("password");
+                            final String name = attrs.get("name");
 
-                            new_user.putString("Email", email);
-                            new_user.putString("Nickname", nickname);
-                            new_user.putString("Password", password);
+                            new_user.putString("email", email);
+                            new_user.putString("nickname", nickname);
+                            new_user.putString("password", password);
+                            new_user.putString("name", name);
 
                             //로그 출력
                             log.info(email);
                             log.info(nickname);
                             log.info(password);
+                            log.info(name);
 
                             //response chunked check
                             request.response().setChunked(true);
@@ -150,7 +153,6 @@ public class WebServer extends Verticle {
                             db_action.putString("action", "find");
                             db_action.putString("collection", "users");
                             db_action.putObject("document", new JsonObject().putString("Email", email));
-                            log.info(db_action);
                             eb.send(DEFAULT_DB_ADDRESS, db_action, new Handler<Message>() {
                                 @Override
                                 public void handle(Message message) {
@@ -159,7 +161,7 @@ public class WebServer extends Verticle {
                                     if (result.getString("status").equals("ok")) {
                                         if (result.getObject("result") == null) {
 
-                                            db_action.putObject("document", new JsonObject().putString("Nickname", nickname));
+                                            db_action.putObject("document", new JsonObject().putString("nickname", nickname));
 
                                             eb.send(DEFAULT_DB_ADDRESS, db_action, new Handler<Message>() {
                                                 @Override
@@ -218,7 +220,7 @@ public class WebServer extends Verticle {
                             JsonObject matcher = new JsonObject();
                             JsonObject param = new JsonObject();
 
-                            matcher.putString("Email", email);
+                            matcher.putString("email", email);
 
                             param.putString("action", "findone");
                             param.putString("collection", "users");
@@ -262,7 +264,7 @@ public class WebServer extends Verticle {
                             JsonObject matcher = new JsonObject();
                             JsonObject param = new JsonObject();
 
-                            matcher.putString("Nickname", nickname);
+                            matcher.putString("nickname", nickname);
 
                             param.putString("action", "findone");
                             param.putString("collection", "users");
@@ -301,14 +303,14 @@ public class WebServer extends Verticle {
                         @Override
                         public void handle(Void aVoid) {
                             MultiMap attrs = request.formAttributes();
-                            String session_id = request.headers().get("Cookie");
+                            final String session_id = request.headers().get("Cookie");
                             final JsonObject user = new JsonObject();
                             JsonObject db_action = new JsonObject();
 
                             log.info("email is " + attrs.get("email"));
 
-                            user.putString("Email", attrs.get("email"));
-                            user.putString("Password", attrs.get("pw"));
+                            user.putString("email", attrs.get("email"));
+                            user.putString("password", attrs.get("pw"));
 
                             db_action.putString("action","findone");
                             db_action.putString("collection","users");
@@ -325,15 +327,32 @@ public class WebServer extends Verticle {
 
                                     JsonObject result = new JsonObject(message.body().toString());
                                     JsonObject data = null; //var to store found user data
-                                    JsonObject response = new JsonObject(); //response object
+                                    final JsonObject response = new JsonObject(); //response object
+                                    JsonObject session_action = new JsonObject(); //session action object
 
                                     if(result.getString("status").equals("ok")){
                                         if(result.getObject("result") != null){
                                             data = result.getObject("result");
-                                            log.info(data.getString("Nickname") + " log in");
-                                            data.putString("Password", ""); //delete password, temp code
+                                            log.info(data.getString("nickname") + " log in");
+                                            data.putString("password", ""); //delete password, temp code
+
+                                            //make response object
                                             response.putString("result","ok");
-                                            request.response().write(response.toString()).end();
+
+                                            CookieManager cookie = new CookieManager(session_id);
+                                            log.info("JSESSIONID : " + cookie.getValue("JSESSIONID"));
+
+                                            //save user information into session
+                                            session_action.putString("action", "put");
+                                            session_action.putString("sessionId", cookie.getValue("JSESSIONID"));
+                                            session_action.putObject("data", data);
+
+                                            eb.send(DEFAULT_SESSION_ADDRESS, session_action, new Handler<Message>() {
+                                                @Override
+                                                public void handle(Message message) {
+                                                    request.response().write(response.toString()).end();
+                                                }
+                                            });
                                             //request.response().sendFile(DEFAULT_WEB_ROOT + "/main.html");
                                         }else{
                                             //no matching user
@@ -356,13 +375,35 @@ public class WebServer extends Verticle {
             }
         });
 
+        /*eb.registerHandler(DEFAULT_SESSION_CLIENT_ADDRESS+".*", new Handler<Message>() {
+            @Override
+            public void handle(Message message) {
+                log.info(message.body().toString());
+            }
+        });*/
+
+        eb.registerHandler("openslide.test", new Handler<Message>() {
+            @Override
+            public void handle(Message message) {
+                String JSESSIONID = new JsonObject(message.body().toString()).getString("JSESSIONID");
+                message.reply("ok");
+
+                eb.send(DEFAULT_SESSION_CLIENT_ADDRESS + "." + JSESSIONID, "wow!!");
+
+            }
+        });
+
+
         SockJSServer sjsServer = vertx.createSockJSServer(server);
 
         //create config object which decide inbound address
         JsonArray inboundPermitted = new JsonArray();
         inboundPermitted.add(new JsonObject("{ \"address\" : \"openslide.editor\" }"));
+        inboundPermitted.add(new JsonObject("{ \"address\" : \"openslide.test\" }"));
+        inboundPermitted.add(new JsonObject("{ \"address_re\" : \"" + DEFAULT_SESSION_CLIENT_ADDRESS + ".*\" }"));
         //create config object which decide outbound address
         JsonArray outboundPermitted = new JsonArray();
+        outboundPermitted.add(new JsonObject("{ \"address_re\" : \"" + DEFAULT_SESSION_CLIENT_ADDRESS + ".*\" }"));
 
         sjsServer.bridge(new JsonObject().putString("prefix", "/eventbus"),
                 inboundPermitted, outboundPermitted, DEFAULT_AUTH_TIMEOUT, DEFAULT_AUTH_ADDRESS);
