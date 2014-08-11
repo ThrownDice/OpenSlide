@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="C:\Program Files\Java\jre8\lib">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../vertx_server/vert.x-2.1.2/lib" />
+      <root url="file://C:/Program Files/Java/jdk1.8.0_11/lib" />
+      <root url="file://C:/Program Files/Java/jre8/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://C:/Program Files/Java/jdk1.8.0_11/lib" />
+    </SOURCES>
+    <jarDirectory url="file://C:/Program Files/Java/jdk1.8.0_11/lib" recursive="false" />
+    <jarDirectory url="file://C:/Program Files/Java/jre8/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../vertx_server/vert.x-2.1.2/lib" recursive="false" />
+    <jarDirectory url="file://C:/Program Files/Java/jdk1.8.0_11/lib" recursive="false" type="SOURCES" />
+  </library>
+</component>

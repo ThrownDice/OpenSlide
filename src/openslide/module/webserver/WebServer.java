@@ -43,6 +43,7 @@ public class WebServer extends Verticle {
         final Logger log = container.logger();
         JsonObject mongo_config = new JsonObject(); //mongoDB configuration object
         JsonObject session_config = new JsonObject(); //session configuration object
+        JsonObject editor_config = new JsonObject(); //editor configuration object
         final EventBus eb = vertx.eventBus();
 
         mongo_config.putString("address", DEFAULT_DB_ADDRESS);
@@ -72,14 +73,21 @@ public class WebServer extends Verticle {
         container.deployModule("com.campudus~session-manager~2.0.1-final", session_config, new AsyncResultHandler<String>() {
             @Override
             public void handle(AsyncResult<String> stringAsyncResult) {
-                if(stringAsyncResult.succeeded()){
+                if (stringAsyncResult.succeeded()) {
                     log.info("com.campudus~session-manager~2.0.1-final is deployed");
-                }else{
+                } else {
                     log.info("com.campudus~session-manager~2.0.1-final failed to deploy");
                     log.info(stringAsyncResult.cause());
                 }
             }
         });
+        container.deployVerticle("Editor.js",session_config,new AsyncResultHandler<String>() {
+            @Override
+            public void handle(AsyncResult<String> stringAsyncResult) {
+
+            }
+        });
+
         server.requestHandler(new Handler<HttpServerRequest>() {
 
             @Override
@@ -349,11 +357,11 @@ public class WebServer extends Verticle {
         });
 
         SockJSServer sjsServer = vertx.createSockJSServer(server);
+
+        //create config object which decide inbound address
         JsonArray inboundPermitted = new JsonArray();
-
-        inboundPermitted.add(new JsonObject("{ \"address\" : \"document.create.request\" }"));
-
-
+        inboundPermitted.add(new JsonObject("{ \"address\" : \"openslide.editor\" }"));
+        //create config object which decide outbound address
         JsonArray outboundPermitted = new JsonArray();
 
         sjsServer.bridge(new JsonObject().putString("prefix", "/eventbus"),
