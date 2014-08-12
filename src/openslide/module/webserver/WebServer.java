@@ -44,6 +44,8 @@ public class WebServer extends Verticle {
         JsonObject mongo_config = new JsonObject(); //mongoDB configuration object
         JsonObject session_config = new JsonObject(); //session configuration object
         JsonObject editor_config = new JsonObject(); //editor configuration object
+        JsonObject group_config = new JsonObject(); //group module configuration object
+        JsonObject document_config = new JsonObject(); //document module configutaion object
         final EventBus eb = vertx.eventBus();
 
         mongo_config.putString("address", DEFAULT_DB_ADDRESS);
@@ -84,7 +86,23 @@ public class WebServer extends Verticle {
         container.deployVerticle("Editor.js",session_config,new AsyncResultHandler<String>() {
             @Override
             public void handle(AsyncResult<String> stringAsyncResult) {
-
+                if(stringAsyncResult.succeeded()){
+                    log.info("Editor.js Module is deployed");
+                }else{
+                    log.info("Editor.js Module failed to deploy");
+                    log.info(stringAsyncResult.cause());
+                }
+            }
+        });
+        container.deployVerticle("GroupModule.js", group_config, new AsyncResultHandler<String>() {
+            @Override
+            public void handle(AsyncResult<String> stringAsyncResult) {
+                if(stringAsyncResult.succeeded()){
+                    log.info("GroupModule.js Module is deployed");
+                }else{
+                    log.info("GroupModule.js Module failed to deploy");
+                    log.info(stringAsyncResult.cause());
+                }
             }
         });
 

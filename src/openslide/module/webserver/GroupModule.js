@@ -4,7 +4,11 @@
 var console = require('vertx/console');
 var event_bus = require('vertx/event_bus');
 var DEFAULT_DB_ADDRESS = "openslide.mongo";
+var DEFAULT_SESSION_ADDRESS = "openslide.session-manager";
+var DEFAULT_EDITOR_ADDRESS = "openslide.editor"
+var DEFAULT_GROUP_ADDRESS = "openslide.group"
 
+console.log('deploying GroupModule.js');
 
 event_bus.registerHandler("openslide.group", function(message, replier){
 
@@ -16,7 +20,7 @@ event_bus.registerHandler("openslide.group", function(message, replier){
         var user_array = new Array();
 
         user_array.push({
-            user_id : message.owner_info.user_id,
+            user_id : message.owner_id,
             role : "owner"
         });
 
@@ -24,7 +28,7 @@ event_bus.registerHandler("openslide.group", function(message, replier){
 
         event_bus.send(DEFAULT_DB_ADDRESS, {
             action : "save",
-            collection : "group",
+            collection : "groups",
             document : group
         }, function(result){
 
