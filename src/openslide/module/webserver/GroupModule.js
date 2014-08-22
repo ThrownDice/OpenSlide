@@ -15,8 +15,15 @@ event_bus.registerHandler("openslide.group", function(message, replier){
     //new group
     if(message.action == "group_new"){
 
+        /**
+         * create new group. save new group and user_groups
+         * parameter information
+         * @param   owner_id    -required-  {string}    group's leader
+         * @result {status,group_id}
+         */
+
         //create new group object and group's users array
-        var group = {};
+        var group_new = {};
         var user_array = new Array();
 
         user_array.push({
@@ -24,30 +31,48 @@ event_bus.registerHandler("openslide.group", function(message, replier){
             role : "owner"
         });
 
-        group.users = user_array;
+        group_new.users = user_array;
 
+        //save new group into groups collection
         event_bus.send(DEFAULT_DB_ADDRESS, {
             action : "save",
             collection : "groups",
-            document : group
+            document : group_new
         }, function(result){
 
             //save success
             if(result.status == "ok"){
-                replier({
-                    status : "ok",
-                    group_id : result._id
+
+                var group_id = result._id;
+
+                //save user_id, group_id into user_groups collection
+                event_bus.send(DEFAULT_DB_ADDRESS, {
+                    action : "save",
+                    collection : "user_groups",
+                    document : {
+                        user_id : message.owner_id,
+                        group_id : group_id
+                    }
+                }, function(result){
+
+                    if(result.status == "ok"){
+                        replier({
+                            status : "ok",
+                            group_id : group_id
+                        });
+                    }else{
+                        replier({
+                            status : "fail"
+                        });
+                    }
                 });
             }else{
                 replier({
                     status : "fail"
                 });
             }
-
         });
-
     }else if(message.action == ""){
 
     }
-
 });
