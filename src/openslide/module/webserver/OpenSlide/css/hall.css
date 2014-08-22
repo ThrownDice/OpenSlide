@@ -1,0 +1,202 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(http://fonts.googleapis.com/earlyaccess/nanumbrushscript.css);
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothiccoding.css);
+@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+
+*{
+    /*font-family: 'Nanum Gothic', serif;*/
+    /*font-family: 'Nanum Brush Script', cursive;*/
+    /*font-family: 'Nanum Gothic Coding', monospace;*/
+    /*font-family: 'Nanum Myeongjo', serif;*/
+    /*font-family: 'Oswald', sans-serif;*/
+}
+
+body{
+    overflow: hidden;
+    /*background-color:#f5f5f5;*/
+    background-color:#f0f0f0;
+}
+
+#wrap{
+    /*margin-top : 10px;*/
+}
+
+.tab_top{
+    height: 80px;
+    width: 100%;
+    box-shadow: 1px 1px 30px gray;
+    /*background-color : white;*/
+    background: url(../img/bg_tab_top.png) repeat-x;
+    position: fixed;
+}
+
+.tab_top .left_menu{
+    position: absolute;
+    height : 80px;
+    width : 80px;
+    float : left;
+    background: url(../img/btn_menu.png) center no-repeat;
+    cursor: pointer;
+}
+.tab_top .left_menu:hover{
+    background: url(../img/btn_menu_h.png) center no-repeat;
+}
+
+.tab_top .tab_top_middle{
+    position: absolute;
+    width : 185px;
+    margin: 0px auto;
+    overflow: hidden;
+    left : 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+}
+
+.tab_top .right_menu{
+    width : 300px;
+    float : right;
+    height: 80px;
+    margin-right:50px;
+}
+
+.right_menu .btn_msg{
+    width : 80px;
+    height: 80px;
+    background: url(../img/btn_msg.png) center no-repeat;
+    cursor: pointer;
+    text-align: center;
+    float:left;
+}
+
+.right_menu .btn_msg .new_msg{
+    margin: 0px auto;
+    height: 20px;
+    font-family: 'Oswald', sans-serif;
+    color: red;
+    font-weight: bold;
+    width : 20px;
+    border:dashed 0px #000000;
+    -moz-border-radius-topleft: 75px;
+    -moz-border-radius-topright:75px;
+    -moz-border-radius-bottomleft:75px;
+    -moz-border-radius-bottomright:75px;
+    -webkit-border-top-left-radius:75px;
+    -webkit-border-top-right-radius:75px;
+    -webkit-border-bottom-left-radius:75px;
+    -webkit-border-bottom-right-radius:75px;
+    border-top-left-radius:75px;
+    border-top-right-radius:75px;
+    border-bottom-left-radius:75px;
+    border-bottom-right-radius:75px;
+    background : white;
+    position: relative;
+    top:27px;
+    font-size: 10pt;
+}
+
+.right_menu .btn_msg:hover{
+    background: url(../img/btn_msg_h.png) center no-repeat;
+}
+
+.right_menu .btn_logout{
+    width : 80px;
+    height: 80px;
+    background: url(../img/btn_logout.png) center no-repeat;
+    float:left;
+    cursor: pointer;
+}
+
+.right_menu .btn_logout:hover{
+    background: url(../img/btn_logout_h.png) center no-repeat;
+}
+
+.tab_left{
+    width: 250px;
+    height : 2000px;
+    background: #3461B2;
+    position : absolute;
+    left : -250px;
+    top : 0px;
+}
+
+.tab_left .btn_close{
+    cursor : pointer;
+}
+
+.tab_left .node_header{
+    text-align: center;
+    margin-top: 10px;
+    padding-bottom : 150px;
+}
+
+.tab_left .node_menu{
+    font-size: 15pt;
+    color : white;
+    font-family: 'Nanum Gothic', serif;
+    height : 50px;
+    border-top: 1px solid white;
+    line-height: 50px;
+    cursor: pointer;
+}
+
+.tab_left .node_menu:hover{
+    background-color:#124db3;
+}
+
+.tab_right{
+    width : 170px;
+    background : white;
+    height : 2000px;
+    position : fixed;
+    border-left: 1px solid #d3d3d3;
+    padding : 0px 5px 0px 5px;
+}
+.tab_right .node_header{
+    margin-top : 3px;
+    padding-bottom : 3px;
+    border-bottom: 1px solid #d3d3d3;
+}
+
+.tab_right .node_header .btn_search{
+    margin-left:15px;
+    float:left;
+    margin-top : 4px;
+}
+
+.tab_right .node_header .btn{
+    float:left;
+    margin-top : 4px;
+    cursor: pointer;
+}
+.tab_right .node_header .btn:hover{
+    background-image: url(images/ui-icons_222222_256x240.png);
+}
+
+.tab_right .node_header .input_find_friend{
+    margin-left:2px;
+    width:100px;
+    height: 12px;
+    border-top: none;
+    border-left : none;
+    border-right: none;
+    border-bottom : 1px solid #d3d3d3;
+    /*border : 1px solid lightgray;*/
+    font-size: 10pt;
+    color:gray;
+    font-family: 'Nanum Gothic', serif;
+    margin-bottom: 1px;
+}
+.tab_right .node{
+    padding-top : 5px;
+    font-size: 9pt;
+    font-family: 'Nanum Gothic', serif;
+}
+
+.tab_right .node > span{
+    color : #3461B2
+}

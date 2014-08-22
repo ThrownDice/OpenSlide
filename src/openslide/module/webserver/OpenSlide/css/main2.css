@@ -1,0 +1,126 @@
+@charset "utf-8";
+
+#header{
+    -moz-box-shadow: 0px 13px 23px #e1e2e3;
+    -webkit-box-shadow: 0px 13px 23px #e1e2e3;
+    box-shadow: 0px 13px 23px #e1e2e3;
+}
+#header .header_top{
+    margin-top : 30px;
+}
+#header .header_contents{
+    width: 1100px;
+    height: 110px;
+    margin: 0px auto;
+}
+#header .header_contents .logo{
+    margin-top:25px;
+}
+
+#header .header_contents .header_menu{
+    float:right;
+    margin-right: 50px;
+    margin-top : 40px;
+}
+
+#header .header_contents .header_menu a{
+    padding : 15px;
+    margin-right : 5px;
+    background : #3461B2;
+    color : white;
+    font-family: 'Open Sans', Arial, Helvetice Neue, sans-serif;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#header .header_contents .header_menu a:hover{
+    background : #FFD67D;
+}
+#container{
+    width: 1100px;
+    margin : 0px auto;
+}
+#container .menu_left{
+    position : absolute;
+    float: left;
+    background: white;
+    width : 200px;
+    height: 100%;
+    -moz-box-shadow: 0px 13px 23px #e1e2e3;
+    -webkit-box-shadow: 0px 13px 23px #e1e2e3;
+    box-shadow: 0px 13px 23px #e1e2e3;
+}
+#container .menu_left p{
+    text-align: center;
+    overflow: hidden;
+}
+#container .menu_left p a{
+    text-align: center;
+    font-family: 'Open Sans', Arial, Helvetice Neue, sans-serif;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    padding: 50px;
+}
+#container .menu_left p a:hover{
+    background : #3461B2;
+    color :white;
+}
+#container .middle_left{
+    margin-left:200px;
+}
+
+#container .middle_left .middle_left_wrap{
+
+    padding: 50px 0px 0px 50px;
+}
+
+#container .middle_left .middle_left_wrap .document_node{
+    width : 200px;
+    height: 112px;
+    background: white;
+    margin: 5px;
+    float:left;
+    -moz-box-shadow: 0px 1px 10px #97BCFF;
+    -webkit-box-shadow: 0px 1px 10px #97BCFF;
+    box-shadow: 0px 1px 10px #97BCFF;
+    overflow: hidden;
+}
+#container .middle_left .middle_left_wrap .document_node:hover{
+    -moz-box-shadow: 0px 1px 10px #B28A34;
+    -webkit-box-shadow: 0px 1px 10px #B28A34;
+    box-shadow: 0px 1px 10px #B28A34;
+}
+
+
+.tab_friend{
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 97%;
+    background: #ffffff;
+    -moz-box-shadow: 0px 13px 23px #e1e2e3;
+    -webkit-box-shadow: 0px 13px 23px #e1e2e3;
+    box-shadow: 0px 13px 23px #e1e2e3;;
+}
+
+.tab_friend .btn_tab{
+    cursor: pointer;
+    height: 100%;
+    width: 60px;
+    background: url("../img/btn_left_n.png") no-repeat center;
+    float:left;
+}
+.tab_friend .tab_friend_list{
+    width:300px;
+    /*background: #3461B2;*/
+}
+.tab_friend .tab_friend_list .friend_user{
+    padding : 5px 0px 5px 0px;
+    color : #3461B2;
+    font-size: 10pt;
+    font-family: 'Open Sans', Arial, Helvetice Neue, sans-serif;
+}
+.tab_friend .tab_friend_list .friend_user:hover{
+    color : #FFD57B;
+}

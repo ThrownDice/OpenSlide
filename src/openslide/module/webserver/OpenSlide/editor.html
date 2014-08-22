@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/editor.css">
+    <link href="css/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/colpick.css">
+
+    <!--for Stand alone Test-->
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/sockjs-0.3.4.min.js"></script>
+    <script src="js/vertxbus-2.1.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/hall.js"></script>
+
+    <script src="js/colpick.js"></script>
+
+</head>
+<body>
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- Add your site or application content here -->
+<div id="editor_wrap">
+
+    <div id="header">
+
+        <div class="header_logo"> <!--<img src="img/logo.png" alt="logo" class="logo"/>-->  </div>
+        <div class="header_menu">
+
+            <div class="subtitle topmenu">
+                이름 없는 문서
+            </div>
+
+            <div class="topmenu_file topmenu ">
+                파일
+            </div>
+            <div class="topmenu_edit topmenu ">
+                편집
+            </div>
+            <div class="topmenu_object topmenu ">
+                삽입
+            </div>
+            <div class="topmenu_form topmenu ">
+                서식
+            </div>
+            <div class="topmenu_view topmenu ">
+                보기
+            </div>
+            <div class="topmenu_animation topmenu ">
+                애니메이션
+            </div>
+
+            <div  class="topmenu_presentation topmenu ">
+                프레젠테이션 보기
+            </div>
+            <div  class="topmenu_comment topmenu ">
+                댓글
+            </div>
+            <div  class="topmenu_share topmenu ">
+                공유하기
+            </div>
+
+            <div class="header_bottom_menu">
+                <div class="slope">
+                    <span>기울기</span> <div class="slope_slider"> </div> <input type="text" class="slope_value" value="0">
+                </div>
+                <div class="thick">
+                    <span>두께</span> <div class="thick_slider"> </div> <input type="text" class="thick_value" value="1">
+                </div>
+                <div class="fade">
+                    <span>흐림</span> <div class="fade_slider"> </div> <input type="text" class="fade_value" value="0">
+                </div>
+                <div class="color">
+                    <div class="color_button"> </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div id="container">
+
+        <div id="container_left">
+
+            <!--슬라이드 리스트를 나타내는 svg-->
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200px" height="100%">
+                <g>
+                    <text x="13" y="34" fill="dimgray" style="font-weight: bold; font-size: 10pt"> 1 </text>
+                    <rect fill="white" stroke="gray" x="34" y="19" width="133" height="78" id="dummy1">
+                    </rect>
+                    <use x="34" y="19" xlink:href="#svg_canvas" id="dummy2"> </use>
+                </g>
+            </svg>
+            <!--슬라이드 리스트를 나타내는 svg -끝- -->
+
+        </div>
+        <div id="container_right">
+
+            <div class="container_right_top">
+
+                <!--캔버스 svg-->
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="70%" height="41%" id="svg_canvas" class="svg_canvas" stroke="gray" viewBox="0 0 800 600">
+                    <rect x="30" y="30" width="200" height="200" fill="#ffff00" id="rect1">
+                    </rect>
+                    <circle cx="50" cy="50" r="20" fill="red" id="circle1"></circle>
+
+                    <use x="100" y="100" xlink:href="#circle1"></use>
+
+                    <text x="10" y="10" style="writing-mode:tb; text-anchor:middle;"> what the fuck </text>
+
+                </svg>
+                <!--캔버스 svg -끝- -->
+
+            </div>
+
+            <div class="container_right_bottom">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--파일 서브메뉴-->
+    <ul class="submenu_file submenu">
+        <li class="file_new"> <span class="ui-icon ui-icon-document"></span> 새로만들기 </li>
+        <li class="file_open"> <span class="ui-icon ui-icon-folder-open"></span> 열기 </li>
+        <li> <span class="ui-icon ui-icon-pencil"></span> 이름 바꾸기 </li>
+        <li> <span class="ui-icon ui-icon-trash"></span> 휴지통으로 </li>
+        <li> <span class="ui-icon ui-icon-unlocked"></span> 공유하기 </li>
+    </ul>
+
+    <!--새로 만들기 dialog-->
+    <div class="file_new_dialog" title="새로 만들기">
+        새 프레젠테이션 제목 : <input type="text">
+    </div>
+
+    <!--열기 dialog-->
+    <div class="file_open_dialog" title="열기">
+        <div class="file_tab"> <input type="file"/> </div>
+        <div class="file_upload">
+            파일을 드래그 하세요
+        </div>
+    </div>
+    <!--파일 서브메뉴 -끝--->
+
+    <!--편집 서브메뉴-->
+    <ul class="submenu_edit submenu">
+        <li class="editor_cancel"> <span class="ui-icon ui-icon-cancel"></span> 작업 취소 </li>
+        <li class="editor_cancel"> <span class="ui-icon ui-icon-arrowreturnthick-1-w"></span> 다시 실행 </li>
+        <li class="editor_cancel"> <span class="ui-icon ui-icon-scissors"></span> 잘라내기 </li>
+        <li class="editor_cancel"> <span class="ui-icon ui-icon-copy"></span> 붙여넣기 </li>
+        <li class="editor_cancel"> <span class="ui-icon ui-icon-newwin"></span> 복사하기 </li>
+    </ul>
+    <!--편집 서브메뉴 -끝--->
+
+    <!--삽입 서브메뉴-->
+    <ul class="submenu_object submenu">
+        <li class="object_pencil"> <span class="ui-icon ui-icon-pencil"> </span> 펜 </li>
+        <li class="object_text"> <span class="ui-icon ui-icon-comment"> </span> 텍스트 </li>
+        <li class="object_polygon"> <span class="ui-icon ui-icon-star"> </span> 도형 </li>
+        <li class="object_image"> <span class="ui-icon ui-icon-image"> </span> 그림 </li>
+        <li class="object_video"> <span class="ui-icon ui-icon-video"> </span> 동영상 </li>
+        <li class="object_chart"> <span class="ui-icon ui-icon-bookmark"> </span> 그래프/차트 </li>
+    </ul>
+    <!--삽입 서브메뉴 -끝--->
+
+    <div id="footer">
+
+
+    </div>
+</div>
+
+<script src="js/module_core.js"></script>
+<script src="js/module_file.js"></script>
+<script src="js/module_object.js"> </script>
+
+<script src="js/editor.js"></script>
+
+</body>
+</html>

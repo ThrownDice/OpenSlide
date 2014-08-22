@@ -1,0 +1,34 @@
+<component name="libraryTable">
+  <library name="C:\Users\TD\Desktop\OpenSlide\lib\batik-1.7\batik-1.7">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../vertx_server/vert.x-2.1.2/lib" />
+      <root url="file://C:/Program Files/Java/jdk1.8.0_11/lib" />
+      <root url="file://C:/Program Files/Java/jre8/lib" />
+      <root url="file://$PROJECT_DIR$/../lib/batik-1.7/batik-1.7" />
+      <root url="file://$PROJECT_DIR$/../lib/batik-1.7/batik-1.7" />
+      <root url="file://$PROJECT_DIR$/../lib/poi-bin-3.10-FINAL-20140208/poi-3.10-FINAL" />
+      <root url="file://$PROJECT_DIR$/../lib/batik-1.7/batik-1.7/lib" />
+      <root url="file://$PROJECT_DIR$/../lib/poi-bin-3.10-FINAL-20140208/poi-3.10-FINAL/lib" />
+      <root url="file://$PROJECT_DIR$/../lib/poi-bin-3.10-FINAL-20140208/poi-3.10-FINAL/ooxml-lib" />
+      <root url="file://C:/testtest" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/../lib/poi-bin-3.10-FINAL-20140208/poi-3.10-FINAL/docs/apidocs" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file://C:/Program Files/Java/jdk1.8.0_11/lib" />
+      <root url="file://$PROJECT_DIR$/../lib/batik-1.7/batik-1.7/docs/demo" />
+      <root url="file://$PROJECT_DIR$/../lib/batik-1.7/batik-1.7/samples/tests/resources/java/sources" />
+    </SOURCES>
+    <jarDirectory url="file://C:/Program Files/Java/jdk1.8.0_11/lib" recursive="false" />
+    <jarDirectory url="file://C:/Program Files/Java/jre8/lib" recursive="false" />
+    <jarDirectory url="file://C:/testtest" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../lib/batik-1.7/batik-1.7" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../lib/batik-1.7/batik-1.7/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../lib/poi-bin-3.10-FINAL-20140208/poi-3.10-FINAL" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../lib/poi-bin-3.10-FINAL-20140208/poi-3.10-FINAL/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../lib/poi-bin-3.10-FINAL-20140208/poi-3.10-FINAL/ooxml-lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../vertx_server/vert.x-2.1.2/lib" recursive="false" />
+    <jarDirectory url="file://C:/Program Files/Java/jdk1.8.0_11/lib" recursive="false" type="SOURCES" />
+  </library>
+</component>

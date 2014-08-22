@@ -1,0 +1,61 @@
+#wrap body{
+    background: white;
+}
+
+.hall_wrap{
+    width : 830px;
+    margin: 0px auto;
+    height : 100%;
+    font-family: 'Nanum Gothic', serif;
+    font-size : 10pt;
+    padding-top: 80px;
+}
+
+.journal{
+    width : 400px;
+    height: 100%;
+    float : left;
+    border : 1px solid lightgray;
+    margin : 5px;
+    /*background : red;*/
+    background-color: white;
+}
+
+.document{
+    width : 400px;
+    height : 100%;
+    float : left;
+    border : 1px solid lightgray;
+    margin : 5px;
+    /*background : blue;*/
+    background-color: white;
+}
+
+.header{
+    margin : 5px;
+    color : #3461B2;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #d3d3d3;
+}
+
+.journal .node{
+    width : 400px;
+    height : 78px;
+    margin : 5px;
+}
+
+.journal .node img{
+    /*margin: 3px;*/
+    margin-right:5px;
+}
+
+.document .node{
+    width: 120px;
+    height: 80px;
+    display : inline-block;
+    padding : 5px;
+}
+
+.contents img{
+    float :left;
+}

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/jquery-ui.css">
+        <link rel="stylesheet" href="css/index.css">
+
+
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div id="wrap">
+        <div id="header">
+            <div class="header_top"></div>
+            <div class="header_contents">
+
+                <img src="img/logo.png" alt="logo" class="logo"/>
+
+                <div class="dv_login">
+
+                    Email <input type="text" name="usr_id" class="bx_login"/>
+                    PW <input type="password" name="usr_pw" class="bx_login">
+
+                    <a href="#" class="btn_login">
+                        Go
+                    </a>
+
+                    <a href="#" class="btn_signup">
+                        Sign Up
+                    </a>
+
+                    <div class="form_signup">
+                        <div class="form_signup_header"> OpenSlide Sign Up</div>
+                        <form action="/signup" method="post" class="form_signup_table">
+                            <table>
+                                <tr>
+                                    <td>
+                                        Email
+                                    </td>
+                                    <td>
+                                        <input type="text" name="email" title="Hello">
+                                        <input type="hidden" name="redundancy_check" value="false">
+                                        <div class="tooltip_redundancy_check">
+                                            Email을 입력하세요
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Nickname
+                                    </td>
+                                    <td>
+                                        <input type="text" name="nickname">
+                                        <input type="hidden" name="nickname_check" value="false">
+                                        <div class="tooltip_nickname_check">
+                                            닉네임을 입력하세요
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Name
+                                    </td>
+                                    <td>
+                                        <input type="text" name="name"/>
+                                        <input type="hidden" name="name_check" value="true">
+                                        <div class="tooltip_name_check">
+                                            이름을 입력하세요
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Password
+                                    </td>
+                                    <td>
+                                        <input type="password" name="password">
+                                        <div class="tooltip_password_check">
+                                            비밀번호를 입력하세요
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Password Confirm
+                                    </td>
+                                    <td>
+                                        <input type="password" name="password_confirm">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <a href="#" class="btn_signup_confirm"> Sign Up </a> <a href="#" class="btn_cancel"> Cancel </a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="container">
+            <div class="container_slider">
+                <div class="container_slider_list">
+                    <div class="slide">
+                        <h1> Create Your Slide! </h1>
+                        <p> With OpenSlide, You can make wonderful slide. </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="container_info">
+                <div class="container_info_contents">
+                    <div class="info_header">
+                        <img src="img/Header01.png" alt="web"/>
+                    </div>
+                    <div class="info_explanation">
+                        <h1> Web </h1>
+                        <p>
+                            Make Your Presentation with our web service
+                        </p>
+                    </div>
+                </div>
+                <div class="container_info_contents">
+                    <div class="info_header">
+                        <img src="img/Header02.png" alt="web"/>
+                    </div>
+                    <div class="info_explanation">
+                        <h1> Share </h1>
+                        <p>
+                            Share Your Slide. You can also cowork
+                        </p>
+                    </div>
+                </div>
+                <div class="container_info_contents">
+                    <div class="info_header">
+                        <img src="img/Header03.png" alt="web"/>
+                    </div>
+                    <div class="info_explanation">
+                        <h1> Presentation </h1>
+                        <p>
+                            You can present you slide through web.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer"> </div>
+
+
+        </div>
+
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>-->
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/jquery-ui.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+
+
+            (function(){
+
+                /** Sign Up 다이얼로그 초기화 **/
+                //버튼 클릭시 다이얼로그 나타나도록 이벤트 핸들링
+                $('.btn_signup').on('click', function(){
+                    $('.form_signup').show();
+                });
+                //다이얼로그 확인, 취소 버튼 이벤트 핸들링
+                //가입 버튼
+                $('.form_signup .btn_signup_confirm').on('click', function(){
+                    var param = {};
+                    param.email = $('.form_signup_table input[name=email]').val();
+                    param.nickname = $('.form_signup_table input[name=nickname]').val();
+                    param.password = $('.form_signup_table input[name=password]').val();
+                    param.name = $('.form_signup_table input[name=name]').val();
+
+                    //유효성 검사
+                    if($('.form_signup_table input[name=redundancy_check]').val() == 'false'){
+                        //email 체크
+                        $('.tooltip_redundancy_check').show().effect('shake');
+                        return false;
+                    }else if(($('.form_signup_table input[name=nickname_check]').val() == 'false') || $('.form_signup_table input[name=nickname_check]').val().trim().length == 0){
+                        //nickname 체크
+                        $('.tooltip_nickname_check').show().effect('shake');
+                        return false;
+                    }else if(($('.form_signup_table input[name=password]').val() != $('.form_signup_table input[name=password_confirm]').val()) || ($('.form_signup_table input[name=password]').val().length == 0)){
+                        //password 체크
+                        $('.tooltip_password_check').show().effect('shake');
+                        return false;
+                    }else if(($('.form_signup_table input[name=name_check]').val() == 'false') || $('.form_signup_table input[name=name]').val().trim().length == 0){
+                        //name 체크
+                        $('.tooltip_name_check').show().effect('shake');
+                        return false;
+                    }
+                    //유효성 검사 -끝-
+
+                    console.log(param);
+
+                    //서버로 데이터 전송
+                    $.ajax({
+                        url:'/signup',
+                        data : param,
+                        type : 'post'
+                    }).done(function(data){
+                        var result = JSON.parse(data)
+                        if(result.success){
+                            alert("가입되었습니다!");
+                            $('.form_signup').hide();
+                            $('.form_signup input').val("");
+                        }else{
+                            alert("가입에 실패하였습니다. 새로고침 후 다시 시도해보세요.");
+                        }
+                    });
+
+                });
+                //취소버튼
+                $('.form_signup .btn_cancel').on('click', function(){
+                    $('.form_signup').hide();
+                });
+
+                //email 값 중복 검사
+                $('.form_signup_table input[name=email]').on('focus', function(){
+                    $('.tooltip_redundancy_check').show();
+                }).on('blur', function(){
+                    if($('input[name=redundancy_check]').val()=='true'){
+                        $('.tooltip_redundancy_check').hide();
+                    }
+                }).on('keyup', function(){
+                    $.ajax({
+                        url:'/signup_redundancy_check',
+                        data : 'email='+$(this).val(),
+                        type : 'post'
+                    }).done(function(data){
+                        var result = JSON.parse(data);
+                        if(result.redundancy){
+                            $('.tooltip_redundancy_check').html("중복된 Email 입니다.").css("color","red");
+                            $('input[name=redundancy_check]').val("false");
+                        }else{
+                            $('.tooltip_redundancy_check').html("사용가능한 Email 입니다.").css("color","green");
+                            $('input[name=redundancy_check]').val("true");
+                        }
+                    });
+                });
+
+                //닉네임 중복 검사
+                $('.form_signup_table input[name=nickname]').on('focus', function(){
+                    $('.tooltip_nickname_check').show();
+                }).on('blur', function(){
+                    if($('input[name=nickname_check]').val()=='true'){
+                        $('.tooltip_nickname_check').hide();
+                    }
+                }).on('keyup', function(){
+                    $.ajax({
+                        url:'/signup_nickname_check',
+                        data : 'nickname='+$(this).val(),
+                        type : 'post'
+                    }).done(function(data){
+                        var result = JSON.parse(data);
+                        if(result.redundancy){
+                            $('.tooltip_nickname_check').html("중복된 닉네임 입니다.").css("color","red");
+                            $('input[name=nickname_check]').val("false");
+                        }else{
+                            $('.tooltip_nickname_check').html("사용가능한 닉네임 입니다.").css("color","green");
+                            $('input[name=nickname_check]').val("true");
+                        }
+                    });
+                });
+
+                //이름
+                $('.form_signup_table input[name=name]').on('focus', function(){
+                    $('.tooltip_name_check').show();
+                }).on('blur', function(){
+                    $('.tooltip_name_check').hide();
+                })
+
+                //비밀번호 유효성 검사
+                $('.form_signup_table input[type=password]').on('focus', function(){
+                    $('.tooltip_password_check').show();
+                }).on('keyup', function(){
+
+                    if($('.form_signup_table input[name=password]').val().length > 0){
+                        if($('.form_signup_table input[name=password]').val() == $('.form_signup_table input[name=password_confirm]').val()) {
+                            $('.tooltip_password_check').html("사용가능한 비밀번호입니다.").css('color','green');
+                        }else {
+                            $('.tooltip_password_check').html("비밀번호가 일치하지 않습니다.").css('color','red');
+                        }
+                    }
+                }).on('blur', function(){
+                    if(($('.form_signup_table input[name=password]').val() == $('.form_signup_table input[name=password_confirm]').val()) && ($('.form_signup_table input[name=password]').val().length > 0)){
+                        $('.tooltip_password_check').hide();
+                    }
+                });
+                /** Sign Up 다이얼로그 초기화 -끝- **/
+
+                /** 로그인 이벤트 초기화 **/
+                //login 함수
+                var fn_login = function(){
+                    var param = {};
+                    param.email = $('input[name=usr_id]').val();
+                    param.pw = $('input[name=usr_pw]').val();
+
+                    console.log('login');
+
+                    $.ajax({
+                        url: '/login',
+                        data: param,
+                        type: 'post'
+                    }).done(function(data){
+
+                        var response = JSON.parse(data);
+
+                        if(response.result == "ok"){
+                            //login 성공 페이지 이동
+                            location.href = "hall.html";
+                        }else{
+                            //login 실패
+                            alert("Email 혹은 비밀번호가 잘못되었습니다.");
+                        }
+                        console.log(data);
+                    });
+                }
+
+                $('.btn_login').on('click', fn_login);
+                $('.bx_login').on('keydown', function(event){
+                    //enter key가 입력되면 로그인 진행
+                    if(event.keyCode == 13){
+                        fn_login();
+                    }
+                });
+
+                /** 로그인 이벤트 초기화 -끝- **/
+
+            })();
+
+        </script>
+    </body>
+</html>
