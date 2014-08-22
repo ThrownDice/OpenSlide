@@ -42,9 +42,11 @@ module_object.Layer = function(name, group, contents){
  * @type {{String}}
  */
 module_object.status_list = {
-    DEFAULT : 'default',    //기본 상태
-    PEN_STANDBY : 'pen_standby',    //펜 툴을 이용하여 그리기를 준비하는 상태
-    PEN_MOVE : 'pen_move'   //펜 툴을 이용해서 path를 그리고 있는 상태
+    DEFAULT : 'default',                //기본 상태
+    PEN_STANDBY : 'pen_standby',        //펜 툴을 이용하여 그리기를 준비하는 상태
+    PEN_MOVE : 'pen_move',              //펜 툴을 이용해서 path를 그리고 있는 상태
+    TEXT_STANDBY : 'text_standby',      //텍스트 툴을 이용하여 글쓰기 준비하는 상태
+    TEXT_TYPING : 'text_typing'         //텍스트 툴로 텍스트를 쓰고 있는 상태
 };
 
 /**
@@ -61,7 +63,7 @@ module_object.option = {
     slope : 0,
     thick : 1,
     fade : 0,
-    color : "ffffff"
+    color : "000000"
 };
 
 /**
@@ -90,18 +92,24 @@ module_object.pen = {
             var path = document.createElementNS(module_core.svg_ns, "path");
             var layer_number = module_object.getLayerNumber();
 
+            //svg의 좌표계로 변환
+            var translate_x = x * (module_core.view_box.UUwidth / $('#' + module_core.canvas_id).width());
+            var translate_y = y * (module_core.view_box.UUheight / $('#' + module_core.canvas_id).height());
+
             group.setAttribute("id", "layer_" + layer_number);
 
-            path.setAttribute("d", "M" + x + " " + y);
+            path.setAttribute("d", "M" + translate_x + " " + translate_y);
             path.setAttribute("fill","none");
             path.setAttribute("stroke", "#" + module_object.option.color);
             path.setAttribute("stroke-width", module_object.option.thick);
 
+            //새 레이어 선언
             var new_layer = new module_object.Layer("layer_" + layer_number, group, path);
 
             $("#"+module_core.canvas_id).append(group);
             $(group).append(path);
 
+            //선택된 오브젝트들 해제하고 펜 툴로 생성되는 오브젝트 추가
             module_object.select_clear();
             module_object.select_objects.push(new_layer);
             module_object.status = module_object.status_list.PEN_MOVE;
@@ -112,7 +120,12 @@ module_object.pen = {
         if(module_object.status == module_object.status_list.PEN_MOVE){
             var layer = module_object.select_objects[0];
             var d = layer.contents.getAttribute("d");
-            layer.contents.setAttribute("d", d + " L" + x + " " + y);
+
+            //svg의 좌표계로 변환
+            var translate_x = x * (module_core.view_box.UUwidth / $('#' + module_core.canvas_id).width());
+            var translate_y = y * (module_core.view_box.UUheight / $('#' + module_core.canvas_id).height());
+
+            layer.contents.setAttribute("d", d + " L" + translate_x + " " + translate_y);
         }
     },
     drawing_stop : function(){
@@ -121,5 +134,68 @@ module_object.pen = {
     }
 };
 
+module_object.text = {
+    texting_prepare : function(){
+        //텍스트를 입력할 준비를 한다
+        module_object.status = module_object.status_list.TEXT_STANDBY;
 
-console.log("moudle_object");
+        //text input 셋팅
+        var $text_input = $('<input type="text" id="text_input">').on({
+            keyup : function(event){
+                //key가 입력될 때 마다 text에 반영한다
+                var layer = module_object.select_objects[0];
+                var text = layer.contents;
+                $(text).text($(this).val());
+            }
+        }).css("display","block");
+        $('body').append($text_input);
+
+    },
+    texting_start : function(x,y){
+        //좌표를 받아서 해당 좌표에 text 엘리먼트를 생성하고 선택 오브젝트에 추가한다.
+        //그리고 텍스트를 입력하는 상태로 전환한다
+        if(module_object.status == module_object.status_list.TEXT_STANDBY){
+            var group = document.createElementNS(module_core.svg_ns, "g");
+            var text = document.createElementNS(module_core.svg_ns, "text");
+            var layer_number = module_object.getLayerNumber();
+
+            //svg의 좌표계로 변환
+            var translate_x = x * (module_core.view_box.UUwidth / $('#' + module_core.canvas_id).width());
+            var translate_y = y * (module_core.view_box.UUheight / $('#' + module_core.canvas_id).height());
+
+            text.setAttribute("x", translate_x);
+            text.setAttribute("y", translate_y);
+
+            $('input#text_input').focus();
+
+            group.setAttribute("id", "layer_" + layer_number);
+
+            $("#"+module_core.canvas_id).append(group);
+            $(group).append(text);
+
+            //새 레이어 선언
+            var new_layer = new module_object.Layer("layer_" + layer_number, group, text);
+
+            //선택된 오브젝트들 해제하고 펜 툴로 생성되는 오브젝트 추가
+            module_object.select_clear();
+            module_object.select_objects.push(new_layer);
+            module_object.status = module_object.status_list.TEXT_TYPING;
+        }
+    },
+    texting_typing : function(key_code){
+        //넘겨 받은 키 코드를 이용해서 텍스트를 더해나간다
+        if(module_object.status == module_object.status_list.TEXT_TYPING){
+            var layer = module_object.select_objects[0];
+            var text = layer.contents;
+
+            $(text).text( $(text).text() + String.fromCharCode(key_code));
+        }
+    },
+    texting_end : function(){
+        //text_input을 삭제하고 디폴트 상태로 돌아간다
+        if(module_object.status == module_object.status_list.TEXT_TYPING){
+            $('input#text_input').remove();
+            module_object.status = module_object.status_list.DEFAULT;
+        }
+    }
+};

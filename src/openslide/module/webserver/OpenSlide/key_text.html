@@ -1,0 +1,23 @@
+<html>
+<head>
+    <script>
+        function svgMod(){
+            var circle1 = document.getElementById("circle1");
+            circle1.style.fill="blue";
+        }
+        function svgMod2(){
+            var circle1 = document.getElementById("circle1");
+            t1.textContent="New content";
+        }
+    </script>
+</head>
+<body>
+<svg id="svg1" xmlns="http://www.w3.org/2000/svg" style="width: 800; height: 1000">
+    <circle id="circle1" r="100" cx="134" cy="134" style="fill: red; stroke: blue; stroke-width: 2"/>
+    <text id="t1" x="50" y="120" onclick="alert(t1.textContent)">Example SVG text 1</text>
+</svg>
+<button onclick=circle1.style.fill="yellow";>Click to change to yellow</button>
+<button onclick=javascript:svgMod();>Click to change to blue</button>
+<button onclick=javascript:svgMod2();>Click to change text</button>
+</body>
+</html>

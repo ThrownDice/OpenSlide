@@ -33,6 +33,11 @@
         'width' :  min_token*0.85*1.7,
         'height' : min_token*0.85
     });
+    $('#dummy2').attr({
+        "transform" : "scale(" + Number(135/(min_token*0.80*1.7)) + ")",
+        "x" : Number(34 * Number((min_token*0.80*1.7)/135)),
+        "y" : Number(19 * Number((min_token*0.80*1.7)/135))
+    });
 
     //이후 윈도우가 리사이즈 될 때 마다 크기가 변화도록 함
     $(window).resize(function(){
@@ -50,7 +55,7 @@
             'height' : min_token*0.80
         });
 
-        //테스트 코드
+        //테스트 코드 (현재 첫 슬라이드만 미리보기 기능을 지원)
         var o_x = $('#dummy2').attr("x");
         var o_y = $('#dummy2').attr("y");
 
@@ -135,8 +140,8 @@
     $('.submenu_object').menu().css('font-size', '10pt').hide();
 
     /** 파일 서브메뉴 이벤트 핸들링 **/
-        //다이얼로그 셋팅
-        //파일-새문서 dialog
+    //다이얼로그 셋팅
+    //파일-새문서 dialog
     $('.file_new_dialog').hide();
     //파일-열기 dialog
     $('.file_open_dialog').hide();
@@ -254,7 +259,36 @@
         }
     });
 
+    //텍스트 도구
+    $('.object_text').on('click', function(){
+        module_object.text.texting_prepare();
+    });
 
+    $('#svg_canvas').on('mouseup', function(event){
+        //텍스트 타이핑 시작
+        if(module_object.status == module_object.status_list.TEXT_STANDBY){
+            var x = event.pageX - $('#svg_canvas').offset().left;
+            var y = event.pageY - $('#svg_canvas').offset().top;
+            module_object.text.texting_start(x,y);
+        }
+    })
+
+    $(document).on('click', function(){
+        //빈 공간을 클릭하면 타이핑을 끝내고 디폴트 상태로 돌아감
+        if(module_object.status == module_object.status_list.TEXT_TYPING){
+            module_object.text.texting_end();
+        }
+    });
+
+    /*$(document).on('keyup', function(event){
+        if(module_object.status == module_object.status_list.TEXT_TYPING){
+
+            module_object.text.texting_typing(event.keyCode);
+
+            //console.log(event.keyCode);
+
+        }
+    });*/
 
     /** 삽입 서브메뉴 이벤트 핸들링 -끝- **/
 
@@ -322,7 +356,7 @@
 
     //색깔
     $('.color_button').colpick({
-        color : 'ffffff',
+        color : module_object.option.color,
         submit : 0,
         onChange : function(hsb,hex,rgb,el,bySetColor){
 
@@ -331,7 +365,7 @@
             $(el).css('background-color','#'+hex);
             if(!bySetColor) $(el).val(hex);
         }
-    });
+    }).css('background-color', '#'+module_object.option.color);
 
     //슬라이더 핸들러 크기 조절
     $('.header_bottom_menu .ui-slider-handle').css({
