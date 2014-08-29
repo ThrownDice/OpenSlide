@@ -13,6 +13,7 @@ import org.vertx.java.core.sockjs.SockJSServer;
 import org.vertx.java.platform.Verticle;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class WebServer extends Verticle {
@@ -38,6 +39,10 @@ public class WebServer extends Verticle {
     public static final String DEFAULT_SESSION_CLEANER_ADDRESS = "openslide.session.cleaner";
 
     public static final String DEFAULT_SESSION_CLIENT_ADDRESS = "openslide.session.client";
+
+    /// ADD ///
+    public static final String DEFAULT_MESSAGE_ADDRESS = "openslide.message";
+    //////////
 
     public static final String DEFAULT_UPLOAD_PATH = "C:\\openslide_uploads\\";
 
@@ -66,6 +71,10 @@ public class WebServer extends Verticle {
         session_config.putNumber("timeout", 10 * 60 * 1000);
         session_config.putString("cleaner", DEFAULT_SESSION_CLEANER_ADDRESS);
         session_config.putString("prefix", DEFAULT_SESSION_CLIENT_ADDRESS);
+
+        //////////////////////////////// ADD ///////////////////////////////////////////
+        session_config.putObject("mongo-sessions", new JsonObject("{ \"address\" : \""+DEFAULT_DB_ADDRESS+"\", \"collection\" : \"session\" }"));
+        /////////////////////////////////////////////////////////////////////////////////
 
         logger.info("ServerCore Deployed");
 
@@ -135,6 +144,19 @@ public class WebServer extends Verticle {
                 }
             }
         });
+        /////// ADD /////////////
+        container.deployVerticle("MessageModule.js",session_config,new AsyncResultHandler<String>() {
+            @Override
+            public void handle(AsyncResult<String> stringAsyncResult) {
+                if(stringAsyncResult.succeeded()){
+                    logger.info("MessageModule.js Module is deployed");
+                }else{
+                    logger.info("MessageModule.js Module failed to deploy");
+                    logger.info(stringAsyncResult.cause());
+                }
+            }
+        });
+        /////////////////////////
 
         server.requestHandler(new Handler<HttpServerRequest>() {
 
@@ -492,6 +514,34 @@ public class WebServer extends Verticle {
                                             CookieManager cookie = new CookieManager(session_id);
                                             logger.info("JSESSIONID : " + cookie.getValue("JSESSIONID"));
 
+
+
+                                            //////////////////////// ADD ///////////////////////////////////////////////////
+                                            //// notice new login user info to other users ////
+                                            // make notice message
+                                            final JsonObject notice_message = new JsonObject();
+                                            notice_message.putString("action", "new_user");
+                                            notice_message.putObject("data", data);
+
+                                            // load session list
+                                            session_action.putString("action", "status");
+                                            session_action.putString("report", "matches");
+                                            session_action.putObject("data", new JsonObject());
+                                            event_bus.send(DEFAULT_SESSION_ADDRESS, session_action, new Handler<Message>() {
+                                                @Override
+                                                public void handle(Message message) {
+                                                    // send notice message to sessions
+                                                    JsonObject result = new JsonObject(message.body().toString());
+                                                    JsonArray sessions = result.getArray("sessions");
+                                                    for (int i=0; i<sessions.size(); i++) {
+                                                        JsonObject tempJsonObject = new JsonObject(sessions.get(i).toString());
+                                                        logger.info("no" + i +" : " + tempJsonObject.getString("sessionId"));
+                                                        event_bus.send(DEFAULT_SESSION_CLIENT_ADDRESS + "." + tempJsonObject.getString("sessionId"), notice_message);
+                                                    }
+                                                }
+                                            });
+                                            /////////////////////////////////////////////////////////////////////////////////
+
                                             //save user information into session
                                             session_action.putString("action", "put");
                                             session_action.putString("sessionId", cookie.getValue("JSESSIONID"));
@@ -504,6 +554,7 @@ public class WebServer extends Verticle {
                                                 }
                                             });
                                             //request.response().sendFile(DEFAULT_WEB_ROOT + "/main.html");
+
                                         } else {
                                             //no matching user
                                             logger.info("There is no such user (" + user.toString() + ")");
@@ -515,7 +566,66 @@ public class WebServer extends Verticle {
                             });
                         }
                     });
-                } else {
+                }
+                ///////////////////////////////// ADD ////////////////////////////////////////////////////////
+                else if (request.uri().equals("/get_user_list")) {
+                    request.expectMultiPart(true);
+                    request.endHandler(new Handler<Void>() {
+                        @Override
+                        public void handle(Void aVoid) {
+                            final MultiMap attrs = request.formAttributes();
+                            final String session_id = request.headers().get("Cookie");
+                            CookieManager cookie = new CookieManager(session_id);
+                            final JsonObject response = new JsonObject(); //response object
+
+
+                            //// send current user list to new login user  ////
+                            // get session list from mongo db
+                            JsonObject db_action = new JsonObject();
+                            db_action.putString("action", "find");
+                            db_action.putString("collection", "session");
+                            db_action.putObject("document", new JsonObject());
+                            final java.lang.String temp_jsessionid = cookie.getValue("JSESSIONID");
+                            event_bus.send(DEFAULT_DB_ADDRESS, db_action, new Handler<Message>() {
+                                @Override
+                                public void handle(Message message) {
+                                    JsonObject result = new JsonObject(message.body().toString());
+                                    if (result.getString("status").equals("ok")) {
+                                        JsonArray results = result.getArray("results");
+                                        JsonArray results_data = new JsonArray();
+                                        if (result.size() > 0) {
+                                            for (int i = 0; i < results.size(); i++) {
+                                                JsonObject tempJsonObject = new JsonObject(results.get(i).toString());
+                                                if (tempJsonObject.containsField("data")) {
+                                                    results_data.add(tempJsonObject.getObject("data"));
+                                                    if ((tempJsonObject.getString("sessionId")).equals(attrs.get("jses"))) {
+                                                        JsonObject my_info = new JsonObject();
+                                                        my_info.putString("action", "my_info");
+                                                        my_info.putString("email", tempJsonObject.getObject("data").getString("email"));
+                                                        my_info.putString("name", tempJsonObject.getObject("data").getString("name"));
+                                                        my_info.putString("nickname", tempJsonObject.getObject("data").getString("nickname"));
+                                                        event_bus.send(DEFAULT_SESSION_CLIENT_ADDRESS + "." + attrs.get("jses"), my_info);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        // send user list message
+                                        JsonObject user_list_message = new JsonObject();
+                                        user_list_message.putString("action", "user_list");
+                                        user_list_message.putArray("data", results_data);
+                                        event_bus.send(DEFAULT_SESSION_CLIENT_ADDRESS + "." + attrs.get("jses"), user_list_message);
+                                        logger.info("send user list to : " + attrs.get("jses")); /////////////
+                                    }
+                                }
+                            });
+                            response.putString("result", "ok");
+                            request.response().setChunked(true);
+                            request.response().write(response.toString()).end();
+                        }
+                    });
+                }
+                ///////////////////////////////////////////////////////////////////////////////////
+                else {
 
                     request.response().sendFile(DEFAULT_WEB_ROOT + request.uri());
 
@@ -550,6 +660,9 @@ public class WebServer extends Verticle {
         JsonArray inboundPermitted = new JsonArray();
         inboundPermitted.add(new JsonObject("{ \"address\" : \"openslide.editor\" }"));
         inboundPermitted.add(new JsonObject("{ \"address\" : \"openslide.test\" }"));
+        /// ADD ///
+        inboundPermitted.add(new JsonObject("{ \"address\" : \"" + DEFAULT_MESSAGE_ADDRESS + "\" }"));
+        ///////////
         inboundPermitted.add(new JsonObject("{ \"address_re\" : \"" + DEFAULT_SESSION_CLIENT_ADDRESS + ".*\" }"));
         //create config object which decide outbound address
         JsonArray outboundPermitted = new JsonArray();
