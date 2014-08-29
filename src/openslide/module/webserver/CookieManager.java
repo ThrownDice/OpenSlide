@@ -5,18 +5,26 @@ import io.netty.handler.codec.http.Cookie;
 import java.util.HashMap;
 
 /**
- * Created by TD on 2014-08-11.
+ * CookieManager Class
+ * This class is utility class which manager cookies
+ *
+ * @author JIHYEON KANG
  */
 public class CookieManager {
 
     private HashMap<String, String> cookie_map = null;
 
-    public CookieManager(String cookie){
-        cookie_map = new HashMap<String, String>();
+    /**
+     * Constructor of CookieManager Class.
+     * Split cookie and save as key-value HashMap.
+     *
+     * @param cookie {String}
+     */
+    public CookieManager(String cookie) throws Exception{
 
         String[] splited_data = cookie.split(";");
+        this.cookie_map = new HashMap<String, String>();
 
-        //parsing cookie
         try{
             for(String data : splited_data){
 
@@ -24,10 +32,7 @@ public class CookieManager {
                 String key = token[0].trim();
                 String value = token[1].trim();
 
-                System.out.println("Key : " + key + " value : " + value);
-
                 cookie_map.put(key, value);
-
             }
         }catch (Exception e){
             System.out.println("Exception occured while parsing cookie.");
@@ -35,9 +40,11 @@ public class CookieManager {
     }
 
     /**
-     * This method return value which matched by key
-     * @param key
-     * @return
+     * Get method of CookieManager Class
+     * This method returns value which correspond to key
+     *
+     * @param key {String}
+     * @return value (if there is no correspond value, return null) {String}
      */
     public String getValue(String key){
         return cookie_map.get(key);

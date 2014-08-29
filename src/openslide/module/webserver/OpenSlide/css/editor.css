@@ -1,6 +1,12 @@
 body{
     overflow : hidden;
 }
+
+textarea#text_input{
+    resize: none;
+    color : transparent;
+}
+
 #editor_wrap{
     left : 0px;
     top : 0px;

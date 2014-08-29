@@ -64,6 +64,10 @@
             "x" : Number(34 * Number((min_token*0.80*1.7)/135)),
             "y" : Number(19 * Number((min_token*0.80*1.7)/135))
         });
+
+        //캔버스 재 조정
+        module_object.readjust();
+
     });
     /**화면 레이아웃 초기화 -끝- **/
 
@@ -267,18 +271,17 @@
     $('#svg_canvas').on('mouseup', function(event){
         //텍스트 타이핑 시작
         if(module_object.status == module_object.status_list.TEXT_STANDBY){
-            var x = event.pageX - $('#svg_canvas').offset().left;
-            var y = event.pageY - $('#svg_canvas').offset().top;
-            module_object.text.texting_start(x,y);
+            module_object.text.texting_start(event);
         }
     })
 
-    $(document).on('click', function(){
+    //제 1 안
+    /*$(document).on('click', function(){
         //빈 공간을 클릭하면 타이핑을 끝내고 디폴트 상태로 돌아감
         if(module_object.status == module_object.status_list.TEXT_TYPING){
             module_object.text.texting_end();
         }
-    });
+    });*/
 
     /*$(document).on('keyup', function(event){
         if(module_object.status == module_object.status_list.TEXT_TYPING){
@@ -366,6 +369,11 @@
             if(!bySetColor) $(el).val(hex);
         }
     }).css('background-color', '#'+module_object.option.color);
+
+    //폰트 사이즈
+    $('.font .font_size').on('keyup', function(){
+        module_object.option.font_size = $(this).val();
+    });
 
     //슬라이더 핸들러 크기 조절
     $('.header_bottom_menu .ui-slider-handle').css({
