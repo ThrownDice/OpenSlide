@@ -144,3 +144,37 @@ textarea#text_input{
     height : 10px;
     border : 2px solid gray;
 }
+
+/*tab menu*/
+.editor_tab{
+    position: fixed;
+    width: 250px;
+    left: 100%;
+    top: 0px;
+    transform : translateX(-250px);
+    background: white;
+    height: 100%;
+    border-left: 1px solid gray;
+    display : none;
+}
+
+.editor_tab .tab_top_menu{
+    height : 20px;
+    margin-bottom : 5px;
+}
+
+.editor_tab .tab_top_menu .ui-icon{
+    float : right;
+}
+
+.editor_tab .tab_top_menu .btn_close{
+    cursor : pointer;
+}
+
+.editor_tab .tab_menu{
+    text-align : center;
+}
+
+.chart_menu{
+    cursor : pointer;
+}

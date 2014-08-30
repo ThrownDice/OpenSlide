@@ -412,6 +412,95 @@ module_object.text = {
 };
 
 /**
+ * 차트를 그리는데 필요한 함수들이 정의되어 있는 객체
+ */
+module_object.chart = {
+
+    /**
+     *
+     */
+    create : function(param){
+
+        var param = param ? param : {};
+
+        //create dummy data
+        param.data = [
+            {
+                node_name : "항목A",
+                value : [
+                    {name : "값A", value : "30"}, {name : "값B", value : "90"}
+                ]
+            },
+            {
+                node_name : "항목B",
+                value : [
+                    {name : "값A", value : "15"}, {name : "값B", value : "80"}
+                ]
+            }
+        ];
+
+        var type = param.type ? param.type : "solid_stick";
+        var x = param.x ? Number(param.x) : 30;
+        var y = param.y ? Number(param.y) : 30;
+
+        var chart_group = document.createElementNS(module_core.svg_ns, "g");
+        var chart_outline = document.createElementNS(module_core.svg_ns, "rect");
+        var zero_line_verticle = document.createElementNS(module_core.svg_ns, "line");
+        var zero_line_horizontal = document.createElementNS(module_core.svg_ns, "line");
+
+        var chart_outline_width = param.width ? Number(param.width) : 423;
+        var chart_outline_height = param.height ? Number(param.height) : 300;
+
+        var left_guide_proportion = 0.07;
+        var bottom_guide_proportion = 0.07;
+
+        $(chart_group).attr({
+            "id" : "layer_" + module_object.getLayerNumber()
+        });
+
+        $(chart_outline).attr({
+            "stroke-width" : 1,
+            "stroke" : "black",
+            "fill" : "transparent",
+            "width" : chart_outline_width,
+            "height" : chart_outline_height,
+            "x" : x,
+            "y" : y
+        });
+
+        //수직 가이드라인 선 설정
+        $(zero_line_verticle).attr({
+            "x1" : x + chart_outline_width * left_guide_proportion,
+            "y1" : y,
+            "x2" : x + chart_outline_width * left_guide_proportion,
+            "y2" : y + chart_outline_height * (1 - bottom_guide_proportion)
+        });
+
+        //수평 가이드라인 선 설정
+        $(zero_line_horizontal).attr({
+            "x1" : x + chart_outline_width * left_guide_proportion,
+            "y1" : y + chart_outline_height * (1 - bottom_guide_proportion),
+            "x2" : x + chart_outline_width,
+            "y2" : y + chart_outline_height * (1 - bottom_guide_proportion)
+        });
+
+        $("#" + module_core.canvas_id).append(chart_group);
+        $(chart_group).append(chart_outline).append(zero_line_verticle).append(zero_line_horizontal);
+
+    },
+
+    /**
+     *
+     */
+    render : function(){
+
+    }
+
+
+}
+
+
+/**
  * 캔버스에 변화가 생겼을 경우 캔버스 내부의 엘리먼트들을 새롭게 다시 조정하는 함수
  * $(document).resize 에 핸들링 되어야 한다
  */

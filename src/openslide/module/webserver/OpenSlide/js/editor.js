@@ -232,7 +232,7 @@
     /** 편집 서브메뉴 이벤트 핸들링 -끝- **/
 
 
-    /** 삽입 서브메뉴 이벤트 핸들링 -끝- **/
+    /** 삽입 서브메뉴 이벤트 핸들링  **/
 
     //펜 도구
     $('.object_pencil').on('click', function(){
@@ -273,7 +273,22 @@
         if(module_object.status == module_object.status_list.TEXT_STANDBY){
             module_object.text.texting_start(event);
         }
-    })
+    });
+
+    //차트 도구
+    $('.object_chart').on('click', function(){
+        $('.chart_tab').css('display', 'block');
+    });
+
+    $('.chart_tab .btn_close').on('click', function(){
+        $('.chart_tab').css('display', 'none');
+    });
+
+    //차트 종류 핸드링
+    $('.chart_tab .solid_stick').on('click', function(){
+        module_object.chart.create();
+    });
+
 
     //제 1 안
     /*$(document).on('click', function(){
