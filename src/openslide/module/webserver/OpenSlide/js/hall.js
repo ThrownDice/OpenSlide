@@ -2,7 +2,7 @@
  * Created by TD on 2014-07-28.
  */
 
-
+var temp_var;
 //Global Object and Value
 /** Vertx Soket Server와 연결 수립 및 이벤트 핸들링 **/
 var DEFAULT_SESSION_CLIENT_ADDRESS = "openslide.session.client.";    //세션을 이용하여 이벤트를 핸들링하는 주소
@@ -43,15 +43,63 @@ event_bus.onopen = function(){
     }, function(message){
 
     });*/
+    //////////// ADD //////////////////////////
+    var message_module = new MessageModule(event_bus, $("#wrap"), $(".tab_right"), JSESSIONID);
+    ////////////////////////////////////////////
 
     /** Session Address 이벤트 핸들링 **/
 
-    event_bus.registerHandler(DEFAULT_SESSION_CLIENT_ADDRESS + JSESSIONID, function(message){
-
+    event_bus.registerHandler(DEFAULT_SESSION_CLIENT_ADDRESS + JSESSIONID, function(message, replyer){
+        ////////////////// ADD ///////////////////////////////////////////////
+        console.log("a message come!");
+        // 추가 - new_user 알림 메세지 (webserver.java에서 옴)
+        if(message.action =="new_user") {
+            console.log("new user! : " + message.data.nickname );
+            message_module.newUser(message.data);
+            temp_var = message.data;
+        }
+        else if(message.action =="user_list"){ // 유저리스트가 옴ㅋ
+            console.log("user_list come!");
+            message_module.userList(message.data);
+            temp_var = message.data;
+        }
+        else if(message.action =="my_info") {
+            console.log("my_info come!");
+            message_module.setMyInfo(message);
+        }
+        else if (message.action == "send_message") {
+            message_module.receiveMessage(message);
+        }
+        else if(message == "test")
+            replyer("ok");
+        /////////////////////////////////////////////////////////////////
     });
-
     /** Session Address 이벤트 핸들링 -끝- **/
 
+    ///////////////////////////// ADD /////////////////////////////
+    /* 유저리스트 가져와야징 */
+    event_bus.send(DEFAULT_SESSION_CLIENT_ADDRESS + JSESSIONID, "test", function(reply) {
+        /* 유저리스트 가져오기 */
+        if(reply == "ok") {
+            console.log("event_bus handler works!");
+            (function(){
+                var param = {};
+                param.jses = JSESSIONID;
+                console.log('getting user list..');
+                $.ajax({ // 클라이언트 : 유저리스트 내놔 (webserver.java)
+                    url: '/get_user_list',
+                    data: param,
+                    type: 'post'
+                }).done(function(data){ // webserver.java : ㅇㅋ 이벤트버스로보냄ㅋ
+                    var response = JSON.parse(data);
+                    if(response.result == "ok") {
+                        console.log('done! : ' + data);
+                    }
+                });
+            }());
+        }
+    });
+    //////////////////////////////////////////////////////////////
 };
 
 /** Vertx Soket Server와 연결 수립 및 이벤트 핸들링 -끝- **/
