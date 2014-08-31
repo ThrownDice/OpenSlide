@@ -416,6 +416,8 @@ module_object.text = {
  */
 module_object.chart = {
 
+    DEFAULT_NODE_STICK_COUNT : 3,
+
     /**
      *
      */
@@ -428,31 +430,79 @@ module_object.chart = {
             {
                 node_name : "항목A",
                 value : [
-                    {name : "값A", value : "30"}, {name : "값B", value : "90"}
+                    {name : "값A", value : "30"}, {name : "값B", value : "90"}, {name : "값C", value : "50"}
                 ]
             },
             {
                 node_name : "항목B",
                 value : [
-                    {name : "값A", value : "15"}, {name : "값B", value : "80"}
+                    {name : "값A", value : "15"}, {name : "값B", value : "80"}, {name : "값D", value : "100"}
+                ]
+            },
+            {
+                node_name : "항목C",
+                value : [
+                    {name : "값A", value : "15"}, {name : "값B", value : "80"}, {name : "값D", value : "100"}
+                ]
+            },
+            {
+                node_name : "항목D",
+                value : [
+                    {name : "값A", value : "10"}, {name : "값B", value : "0"}, {name : "값D", value : "40"}
                 ]
             }
         ];
 
+        //왼쪽 아래쪽 텍스트를 위한 여백 비율
+        var left_guide_proportion = 0.07;
+        var bottom_guide_proportion = 0.07;
+
         var type = param.type ? param.type : "solid_stick";
         var x = param.x ? Number(param.x) : 30;
         var y = param.y ? Number(param.y) : 30;
+
+        var node_stick_count = 0;
+        if(param.data[0] != null){
+            node_stick_count = param.data[0].value.length ? param.data[0].value.length : module_object.chart.DEFAULT_NODE_STICK_COUNT;
+        }
 
         var chart_group = document.createElementNS(module_core.svg_ns, "g");
         var chart_outline = document.createElementNS(module_core.svg_ns, "rect");
         var zero_line_verticle = document.createElementNS(module_core.svg_ns, "line");
         var zero_line_horizontal = document.createElementNS(module_core.svg_ns, "line");
 
+        //차트 전체 너비, 높이
         var chart_outline_width = param.width ? Number(param.width) : 423;
         var chart_outline_height = param.height ? Number(param.height) : 300;
 
-        var left_guide_proportion = 0.07;
-        var bottom_guide_proportion = 0.07;
+        //안쪽 공간 너비, 높이
+        var chart_inner_width = chart_outline_width * (1 - left_guide_proportion);
+        var chart_inner_height = chart_outline_height * (1 - bottom_guide_proportion);
+        //안쪽 항목 여백 비율
+        var inner_proportion = 0.07;
+
+        //항목별 할당되는 너비
+        var node_width = ((1 - inner_proportion*2)*chart_inner_width)/param.data.length;
+        //항목간 여백 배율
+        var node_proportion = 0.07;
+
+        //항목별 막대 너비
+        var node_stick_width = ((1 - node_proportion * 2) * node_width)/node_stick_count;
+        //항목별 막대 높이
+        var node_stick_height = 0;
+        //막대 리스트
+        var chart_stick_list = new Array();
+
+        //차트 가이드라인 최대값
+        var chart_guide_max = 200;
+        //차트 가이드라인 최소값
+        var chart_guide_min = 0;
+        //차트 가이드라인 단위
+        var chart_guide_range = 10;
+
+        var guide_line_list = new Array();
+        var guide_line_value = chart_guide_min; //가이드라인 렌더링시 사용하게 되는 변수
+
 
         $(chart_group).attr({
             "id" : "layer_" + module_object.getLayerNumber()
@@ -484,8 +534,57 @@ module_object.chart = {
             "y2" : y + chart_outline_height * (1 - bottom_guide_proportion)
         });
 
+        //차트 레이아웃 설정
         $("#" + module_core.canvas_id).append(chart_group);
         $(chart_group).append(chart_outline).append(zero_line_verticle).append(zero_line_horizontal);
+
+
+        //차트 가이드 라인 렌더링
+        var guide_x1 = x + (chart_outline_width * left_guide_proportion);
+        var guide_x2 = x + chart_outline_width;
+        while(guide_line_value < chart_guide_max){
+            guide_line_value += chart_guide_range;
+            var guide_line = document.createElementNS(module_core.svg_ns, "line");
+            var guide_y = y + chart_inner_height - (guide_line_value/chart_guide_max) * chart_inner_height;
+            $(guide_line).attr({
+                "x1" : guide_x1,
+                "x2" : guide_x2,
+                "y1" : guide_y,
+                "y2" : guide_y,
+                "stroke-width" : 1,
+                "stroke" : "gray"
+            });
+            guide_line_list.push(guide_line);
+        }
+
+        for(var i=0; i<guide_line_list.length; i++){
+            $(chart_group).append(guide_line_list[i]);
+        }
+
+        //차트 안 막대 랜더링
+        for(var i= 0; i<param.data.length; i++){
+
+            for(var j=0; j<param.data[i].value.length; j++){
+                node_stick_height = (param.data[i].value[j].value/chart_guide_max) * chart_inner_height;
+                var stick_x = x + (chart_outline_width * left_guide_proportion) + (chart_inner_width * inner_proportion) + (node_width * node_proportion) + (node_width * i) + (node_stick_width * j);
+                var stick_y = y + (chart_inner_height - node_stick_height);
+
+                var stick = document.createElementNS(module_core.svg_ns, "rect");
+                $(stick).attr({
+                    "x" : stick_x,
+                    "y" : stick_y,
+                    "width" : node_stick_width,
+                    "height" : node_stick_height,
+                    "fill" : "black"
+                });
+                chart_stick_list.push(stick);
+                console.log(stick);
+            }
+        }
+
+        for(var i=0; i<chart_stick_list.length; i++){
+            $(chart_group).append(chart_stick_list[i]);
+        }
 
     },
 
